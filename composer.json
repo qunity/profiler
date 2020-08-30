@@ -1,0 +1,21 @@
+{
+  "name": "qunity/profiler",
+  "description": "Qunity Component Profiler",
+  "type": "library",
+  "version": "dev",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Rodion Kachkin",
+      "email": "kyleRQWS@gmail.com"
+    }
+  ],
+  "require": {
+    "php": "^7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "Qunity\\Component\\": "src"
+    }
+  }
+}
