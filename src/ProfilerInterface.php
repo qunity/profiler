@@ -44,19 +44,19 @@ interface ProfilerInterface
     public static function addOutput(string $class, array $args = []): void;
 
     /**
-     * Start profiler metering
+     * Start profiler measurement
      * @param string $code
      */
     public static function start(string $code): void;
 
     /**
-     * Stop profiler metering
+     * Stop profiler measurement
      * @param string $code
      */
     public static function stop(string $code): void;
 
     /**
-     * Profiler drivers data output
+     * Profiler drivers measurement output
      */
     public static function output(): void;
 }
