@@ -23,13 +23,13 @@ class Standard implements DriverInterface
     /**#@+
      * Timer array keys
      */
-    protected const KEY_TIME = 'time';
-    protected const KEY_AVG = 'avg';
+    public const KEY_TIME = 'time';
+    public const KEY_AVG = 'avg';
     protected const KEY_START = 'start';
-    protected const KEY_COUNT = 'count';
-    protected const KEY_REALMEM = 'realmem';
+    public const KEY_COUNT = 'count';
+    public const KEY_REALMEM = 'realmem';
     protected const KEY_REALMEM_START = 'realmem_start';
-    protected const KEY_EMALLOC = 'emalloc';
+    public const KEY_EMALLOC = 'emalloc';
     protected const KEY_EMALLOC_START = 'emalloc_start';
     /**#@-*/
 
