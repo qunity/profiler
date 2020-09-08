@@ -21,17 +21,18 @@ use Qunity\Component\Profiler\DriverInterface;
 class Standard implements DriverInterface
 {
     /**#@+
-     * Timer array keys
+     * Timers key names
      */
-    public const KEY_TIME = 'time';
-    public const KEY_AVG = 'avg';
-    protected const KEY_START = 'start';
-    public const KEY_COUNT = 'count';
-    public const KEY_REALMEM = 'realmem';
-    protected const KEY_REALMEM_START = 'realmem_start';
-    public const KEY_EMALLOC = 'emalloc';
-    protected const KEY_EMALLOC_START = 'emalloc_start';
+    protected const MEASUREMENT_START = 'start';
+    protected const MEASUREMENT_REALMEM_START = 'realmem_start';
+    protected const MEASUREMENT_EMALLOC_START = 'emalloc_start';
     /**#@-*/
+
+    /**
+     * Timers nesting stack
+     * @var array
+     */
+    protected array $codes = [];
 
     /**
      * Timers data
@@ -46,20 +47,17 @@ class Standard implements DriverInterface
     {
         if (empty($this->timers[$code])) {
             $this->timers[$code] = [
-                self::KEY_TIME => 0,
-                self::KEY_AVG => 0,
-                self::KEY_START => 0,
-                self::KEY_COUNT => 0,
-                self::KEY_REALMEM => 0,
-                self::KEY_REALMEM_START => 0,
-                self::KEY_EMALLOC => 0,
-                self::KEY_EMALLOC_START => 0
+                self::MEASUREMENT_TIME => 0,
+                self::MEASUREMENT_COUNT => 0,
+                self::MEASUREMENT_REALMEM => 0,
+                self::MEASUREMENT_EMALLOC => 0
             ];
         }
-        $this->timers[$code][self::KEY_REALMEM_START] = memory_get_usage(true);
-        $this->timers[$code][self::KEY_EMALLOC_START] = memory_get_usage();
-        $this->timers[$code][self::KEY_START] = microtime(true);
-        $this->timers[$code][self::KEY_COUNT]++;
+        $this->timers[$code][self::MEASUREMENT_REALMEM_START] = memory_get_usage(true);
+        $this->timers[$code][self::MEASUREMENT_EMALLOC_START] = memory_get_usage();
+        $this->timers[$code][self::MEASUREMENT_START] = microtime(true);
+        $this->timers[$code][self::MEASUREMENT_COUNT]++;
+        $this->codes[] = $code;
     }
 
     /**
@@ -68,16 +66,17 @@ class Standard implements DriverInterface
     public function stop(string $code): void
     {
         if (empty($this->timers[$code])) {
-            throw new InvalidArgumentException(sprintf("Timer \"%s\" doesn't exist", $code));
+            throw new InvalidArgumentException(sprintf("Profiler timer \"%s\" doesn't exist", $code));
         }
-        $this->timers[$code][self::KEY_TIME] += microtime(true) - $this->timers[$code][self::KEY_START];
-        $this->timers[$code][self::KEY_AVG] =
-            $this->timers[$code][self::KEY_TIME] / $this->timers[$code][self::KEY_COUNT];
-        $this->timers[$code][self::KEY_START] = 0;
-        $this->timers[$code][self::KEY_REALMEM] += memory_get_usage(true);
-        $this->timers[$code][self::KEY_REALMEM] -= $this->timers[$code][self::KEY_REALMEM_START];
-        $this->timers[$code][self::KEY_EMALLOC] += memory_get_usage();
-        $this->timers[$code][self::KEY_EMALLOC] -= $this->timers[$code][self::KEY_EMALLOC_START];
+        $this->timers[$code][self::MEASUREMENT_TIME] +=
+            microtime(true) - $this->timers[$code][self::MEASUREMENT_START];
+        $this->timers[$code][self::MEASUREMENT_START] = 0;
+        $this->timers[$code][self::MEASUREMENT_REALMEM] += memory_get_usage(true);
+        $this->timers[$code][self::MEASUREMENT_REALMEM] -= $this->timers[$code][self::MEASUREMENT_REALMEM_START];
+        $this->timers[$code][self::MEASUREMENT_EMALLOC] += memory_get_usage();
+        $this->timers[$code][self::MEASUREMENT_EMALLOC] -= $this->timers[$code][self::MEASUREMENT_EMALLOC_START];
+        $this->timers[$code][self::MEASUREMENT_PATH] = $this->codes;
+        unset($this->codes[array_key_last($this->codes)]);
     }
 
     /**
@@ -86,13 +85,22 @@ class Standard implements DriverInterface
     public function data(): array
     {
         $data = [];
-        foreach ($this->timers as $code => $timer) {
-            $data[$code] = [
-                self::KEY_TIME => $timer[self::KEY_TIME],
-                self::KEY_AVG => $timer[self::KEY_AVG],
-                self::KEY_COUNT => $timer[self::KEY_COUNT],
-                self::KEY_REALMEM => $timer[self::KEY_REALMEM],
-                self::KEY_EMALLOC => $timer[self::KEY_EMALLOC]
+        $index = 0;
+        foreach ($this->timers as $timer) {
+            $data[] = [
+                self::MEASUREMENT_INDEX => ++$index,
+                self::MEASUREMENT_PATH => $timer[self::MEASUREMENT_PATH],
+                self::MEASUREMENT_TIME => number_format(
+                    round($timer[self::MEASUREMENT_TIME], 6, PHP_ROUND_HALF_UP),
+                    6
+                ),
+                self::MEASUREMENT_AVG => number_format(
+                    round($timer[self::MEASUREMENT_TIME] / $timer[self::MEASUREMENT_COUNT], 6, PHP_ROUND_HALF_UP),
+                    6
+                ),
+                self::MEASUREMENT_COUNT => $timer[self::MEASUREMENT_COUNT],
+                self::MEASUREMENT_REALMEM => $timer[self::MEASUREMENT_REALMEM],
+                self::MEASUREMENT_EMALLOC => $timer[self::MEASUREMENT_EMALLOC]
             ];
         }
         return $data;
