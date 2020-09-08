@@ -17,6 +17,18 @@ namespace Qunity\Component\Profiler;
  */
 interface DriverInterface
 {
+    /**#@+
+     * Measurement key names
+     */
+    public const MEASUREMENT_INDEX = '#';
+    public const MEASUREMENT_PATH = 'path';
+    public const MEASUREMENT_TIME = 'time';
+    public const MEASUREMENT_AVG = 'avg';
+    public const MEASUREMENT_COUNT = 'count';
+    public const MEASUREMENT_REALMEM = 'realmem';
+    public const MEASUREMENT_EMALLOC = 'emalloc';
+    /**#@-*/
+
     /**
      * Start measurement
      * @param string $code
