@@ -1,21 +1,26 @@
 Qunity Component Profiler
 =========================
 
-Profiler for measuring runtime and memory usage.
+Profiler for measurement runtime and memory usage.
 
-Example for use
----------------
+Example
+-------
+
+Several classes of drivers and outputs can be used at the same time.
 
 ```
-\Qunity\Component\Profiler::enable();
+use Qunity\Component\Profiler
+use Qunity\Component\Profiler\Driver\Standard as StandardDriver
+use Qunity\Component\Profiler\Output\Html as HtmlOutput
 
-\Qunity\Component\Profiler::addDriver(\Qunity\Component\Profiler\Driver\Standard::class)
-\Qunity\Component\Profiler::addOutput(\Qunity\Component\Profiler\Output\Html::class);
-// connecting other driver or output classes...
+Profiler::enable()
 
-\Qunity\Component\Profiler::start(<measurement code>);
+Profiler::addDriver(StandardDriver::class)
+Profiler::addOutput(HtmlOutput::class)
+
+Profiler::start('code')
 ...
-\Qunity\Component\Profiler::stop(<measurement code>);
+Profiler::stop('code')
 
-\Qunity\Component\Profiler::output();
+Profiler::output()
 ```
