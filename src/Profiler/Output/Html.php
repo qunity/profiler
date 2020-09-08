@@ -80,7 +80,7 @@ HTML;
     }
 
     /**
-     * Create HTML by string and settings
+     * Create html-string by string and settings
      *
      * @param string $tag
      * @param string $string
