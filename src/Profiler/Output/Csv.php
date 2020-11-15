@@ -40,6 +40,9 @@ class Csv implements OutputInterface
      */
     public function output(DriverInterface $driver): void
     {
+        if (!is_dir(($dir = dirname($this->file)))) {
+            mkdir($dir, 0755, true);
+        }
         $handle = fopen($this->file, 'w');
         fputcsv($handle, [
             ucfirst(strtolower(DriverInterface::MEASUREMENT_INDEX)),

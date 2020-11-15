@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+1.0.2
+-----
+
+ * fixed saving CSV to subfolders
+
 1.0.1
 -----
 
