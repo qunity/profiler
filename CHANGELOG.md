@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+1.0.3
+-----
+
+ * fixed bug html output
+ * added minimum measurement duration
+
 1.0.2
 -----
 

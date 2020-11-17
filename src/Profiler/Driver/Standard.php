@@ -31,7 +31,12 @@ class Standard implements DriverInterface
     /**
      * Number of decimal digits in timing
      */
-    protected const TIME_PRECISION = 6;
+    protected const TIME_PRECISION = 5;
+
+    /**
+     * Minimum measurement duration
+     */
+    protected const TIME_MINIMUM = 0.001;
 
     /**
      * Measurement stack
@@ -92,6 +97,9 @@ class Standard implements DriverInterface
         $data = [];
         $index = 0;
         foreach ($this->data as $timer) {
+            if ($timer[self::MEASUREMENT_TIME] < self::TIME_MINIMUM) {
+                continue;
+            }
             $data[] = [
                 self::MEASUREMENT_INDEX => ++$index,
                 self::MEASUREMENT_PATH => $timer[self::MEASUREMENT_PATH],

@@ -54,7 +54,7 @@ HTML;
         $htmlTbody = '';
         foreach ($driver->data() as $row) {
             $row[DriverInterface::MEASUREMENT_PATH] =
-                str_repeat($htmlIndent, $row[DriverInterface::MEASUREMENT_INDEX] - 1) .
+                str_repeat($htmlIndent, count($row[DriverInterface::MEASUREMENT_PATH]) - 1) .
                 implode($htmlSeparator, $row[DriverInterface::MEASUREMENT_PATH]);
 
             $htmlTbody .= $this->html(
