@@ -31,16 +31,13 @@ abstract class AbstractCommon implements CommonInterface
         if ($key) {
             if (isset($this->config[$key])) {
                 return $this->config[$key];
-            } else {
-                return $default;
             }
         } else {
             if ($this->config) {
                 return $this->config;
-            } else {
-                return $default;
             }
         }
+        return $default;
     }
 
     /**
