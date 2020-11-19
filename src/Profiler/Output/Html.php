@@ -11,14 +11,14 @@
 
 namespace Qunity\Component\Profiler\Output;
 
+use Qunity\Component\Profiler\AbstractOutput;
 use Qunity\Component\Profiler\DriverInterface;
-use Qunity\Component\Profiler\OutputInterface;
 
 /**
  * Class Html
  * @package Qunity\Component\Profiler\Output
  */
-class Html implements OutputInterface
+class Html extends AbstractOutput
 {
     /**
      * @inheritDoc
