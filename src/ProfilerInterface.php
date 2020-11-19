@@ -11,12 +11,21 @@
 
 namespace Qunity\Component;
 
+use Qunity\Component\Profiler\DriverInterface;
+use Qunity\Component\Profiler\OutputInterface;
+
 /**
  * Interface ProfilerInterface
  * @package Qunity\Component
  */
 interface ProfilerInterface
 {
+    /**
+     * Configure profiler
+     * @param array $config
+     */
+    public static function configure(array $config): void;
+
     /**
      * Enable profiler
      */
@@ -30,18 +39,36 @@ interface ProfilerInterface
     /**
      * Add profiler driver
      *
+     * @param string $name
      * @param string $class
-     * @param array $args
+     * @param array $config
      */
-    public static function addDriver(string $class, array $args = []): void;
+    public static function addDriver(string $name, string $class, array $config = []): void;
+
+    /**
+     * Get profiler driver
+     *
+     * @param string $name
+     * @return DriverInterface
+     */
+    public static function getDriver(string $name): DriverInterface;
 
     /**
      * Add profiler output
      *
+     * @param string $name
      * @param string $class
-     * @param array $args
+     * @param array $config
      */
-    public static function addOutput(string $class, array $args = []): void;
+    public static function addOutput(string $name, string $class, array $config = []): void;
+
+    /**
+     * Get profiler output
+     *
+     * @param string $name
+     * @return OutputInterface
+     */
+    public static function getOutput(string $name): OutputInterface;
 
     /**
      * Start profiler measurement
