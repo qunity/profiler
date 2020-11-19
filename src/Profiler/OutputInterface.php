@@ -15,7 +15,7 @@ namespace Qunity\Component\Profiler;
  * Interface OutputInterface
  * @package Qunity\Component\Profiler
  */
-interface OutputInterface
+interface OutputInterface extends CommonInterface
 {
     /**
      * Driver measurement output
