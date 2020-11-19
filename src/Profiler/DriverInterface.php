@@ -15,7 +15,7 @@ namespace Qunity\Component\Profiler;
  * Interface DriverInterface
  * @package Qunity\Component\Profiler
  */
-interface DriverInterface
+interface DriverInterface extends CommonInterface
 {
     /**#@+
      * Measurement key names
