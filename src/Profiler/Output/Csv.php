@@ -11,39 +11,28 @@
 
 namespace Qunity\Component\Profiler\Output;
 
+use LogicException;
+use Qunity\Component\Profiler\AbstractOutput;
 use Qunity\Component\Profiler\DriverInterface;
-use Qunity\Component\Profiler\OutputInterface;
 
 /**
  * Class Csv
  * @package Qunity\Component\Profiler\Output
  */
-class Csv implements OutputInterface
+class Csv extends AbstractOutput
 {
-    /**
-     * Output file path
-     * @var string
-     */
-    protected string $file;
-
-    /**
-     * Csv constructor
-     * @param string $file
-     */
-    public function __construct(string $file)
-    {
-        $this->file = $file;
-    }
-
     /**
      * @inheritDoc
      */
     public function output(DriverInterface $driver): void
     {
-        if (!is_dir(($dir = dirname($this->file)))) {
+        if (!($file = $this->getConfig('file'))) {
+            throw new LogicException('Output CSV file path not specified');
+        }
+        if (!is_dir(($dir = dirname($file)))) {
             mkdir($dir, 0755, true);
         }
-        $handle = fopen($this->file, 'w');
+        $handle = fopen($file, 'w');
         fputcsv($handle, [
             ucfirst(strtolower(DriverInterface::MEASUREMENT_INDEX)),
             ucfirst(strtolower(DriverInterface::MEASUREMENT_PATH)),
