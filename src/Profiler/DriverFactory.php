@@ -23,18 +23,18 @@ class DriverFactory
      * Create instance driver-profiler
      *
      * @param string $class
-     * @param array $args
+     * @param array $config
      *
      * @return DriverInterface
      */
-    public static function create(string $class, array $args = []): DriverInterface
+    public static function create(string $class, array $config = []): DriverInterface
     {
-        $instance = new $class(...$args);
+        $instance = new $class();
         if (!($instance instanceof DriverInterface)) {
             throw new InvalidArgumentException(
                 sprintf('Class %s does`t implement the interface %s', get_class($instance), DriverInterface::class)
             );
         }
-        return $instance;
+        return $instance->setConfig($config);
     }
 }

@@ -23,18 +23,18 @@ class OutputFactory
      * Create instance output-profiler
      *
      * @param string $class
-     * @param array $args
+     * @param array $config
      *
      * @return OutputInterface
      */
-    public static function create(string $class, array $args = []): OutputInterface
+    public static function create(string $class, array $config = []): OutputInterface
     {
-        $instance = new $class(...$args);
+        $instance = new $class();
         if (!($instance instanceof OutputInterface)) {
             throw new InvalidArgumentException(
                 sprintf('Class %s does`t implement the interface %s', get_class($instance), OutputInterface::class)
             );
         }
-        return $instance;
+        return $instance->setConfig($config);
     }
 }
