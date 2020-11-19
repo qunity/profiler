@@ -12,13 +12,13 @@
 namespace Qunity\Component\Profiler\Driver;
 
 use InvalidArgumentException;
-use Qunity\Component\Profiler\DriverInterface;
+use Qunity\Component\Profiler\AbstractDriver;
 
 /**
  * Class Standard
  * @package Qunity\Component\Profiler\Driver
  */
-class Standard implements DriverInterface
+class Standard extends AbstractDriver
 {
     /**#@+
      * Additional measurement key names
@@ -29,14 +29,14 @@ class Standard implements DriverInterface
     /**#@-*/
 
     /**
-     * Number of decimal digits in timing
+     * Default number of decimal digits in timing
      */
-    protected const TIME_PRECISION = 5;
+    protected const DEFAULT_TIME_PRECISION = 9;
 
     /**
-     * Minimum measurement duration
+     * Default minimum measurement duration
      */
-    protected const TIME_MINIMUM = 0.001;
+    protected const DEFAULT_TIME_MINIMUM = 0;
 
     /**
      * Measurement stack
@@ -76,7 +76,7 @@ class Standard implements DriverInterface
     public function stop(string $code): void
     {
         if (empty($this->data[$code])) {
-            throw new InvalidArgumentException(sprintf("Profiler measurement %s doesn't exist", $code));
+            throw new InvalidArgumentException(sprintf('Profiler measurement %s does not exist', $code));
         }
         $this->data[$code][self::MEASUREMENT_TIME] +=
             microtime(true) - $this->data[$code][self::MEASUREMENT_START];
@@ -96,23 +96,21 @@ class Standard implements DriverInterface
     {
         $data = [];
         $index = 0;
+        $timePrecision = $this->getConfig('time_precision', self::DEFAULT_TIME_PRECISION);
+        $timeMinimum = $this->getConfig('time_minimum', self::DEFAULT_TIME_MINIMUM);
+        $formatTime = function (float $time) use ($timePrecision) {
+            return number_format(round($time, $timePrecision, PHP_ROUND_HALF_UP), $timePrecision);
+        };
         foreach ($this->data as $timer) {
-            if ($timer[self::MEASUREMENT_TIME] < self::TIME_MINIMUM) {
+            if ($timer[self::MEASUREMENT_TIME] < $timeMinimum) {
                 continue;
             }
             $data[] = [
                 self::MEASUREMENT_INDEX => ++$index,
                 self::MEASUREMENT_PATH => $timer[self::MEASUREMENT_PATH],
-                self::MEASUREMENT_TIME => number_format(round(
-                    $timer[self::MEASUREMENT_TIME],
-                    self::TIME_PRECISION,
-                    PHP_ROUND_HALF_UP
-                ), self::TIME_PRECISION),
-                self::MEASUREMENT_AVG => number_format(round(
-                    $timer[self::MEASUREMENT_TIME] / $timer[self::MEASUREMENT_COUNT],
-                    self::TIME_PRECISION,
-                    PHP_ROUND_HALF_UP
-                ), self::TIME_PRECISION),
+                self::MEASUREMENT_TIME => $formatTime($timer[self::MEASUREMENT_TIME]),
+                self::MEASUREMENT_AVG =>
+                    $formatTime($timer[self::MEASUREMENT_TIME] / $timer[self::MEASUREMENT_COUNT]),
                 self::MEASUREMENT_COUNT => $timer[self::MEASUREMENT_COUNT],
                 self::MEASUREMENT_REALMEM => $timer[self::MEASUREMENT_REALMEM],
                 self::MEASUREMENT_EMALLOC => $timer[self::MEASUREMENT_EMALLOC]
