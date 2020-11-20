@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.0.2
+-----
+
+ * optimized activity status checking
+
 2.0.1
 -----
 

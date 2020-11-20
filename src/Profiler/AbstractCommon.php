@@ -54,6 +54,9 @@ abstract class AbstractCommon implements CommonInterface
      */
     public function isEnabled(): bool
     {
-        return $this->config['enabled'] ?? false;
+        if (isset($this->config['enabled'])) {
+            return (bool)$this->config['enabled'];
+        }
+        return false;
     }
 }
