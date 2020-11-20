@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.0.0
+-----
+
+ * added ability to configure drivers and outputs
+
 1.0.3
 -----
 
