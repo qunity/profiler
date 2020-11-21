@@ -102,4 +102,10 @@ interface ProfilerInterface
      * Profiler drivers measurement output
      */
     public static function output(): void;
+
+    /**
+     * Check is allowed profiler activity
+     * @return bool
+     */
+    public static function isAllowed(): bool;
 }

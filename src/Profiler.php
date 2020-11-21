@@ -16,6 +16,7 @@ use Qunity\Component\Profiler\DriverFactory;
 use Qunity\Component\Profiler\DriverInterface;
 use Qunity\Component\Profiler\OutputFactory;
 use Qunity\Component\Profiler\OutputInterface;
+use Symfony\Component\HttpFoundation\Request;
 
 /**
  * Class Profiler
@@ -42,6 +43,12 @@ class Profiler implements ProfilerInterface
     protected static array $outputs = [];
 
     /**
+     * Allowed IPs list for profiler
+     * @var array
+     */
+    protected static array $allowIps = [];
+
+    /**
      * @inheritDoc
      */
     public static function configure(array $config): void
@@ -58,6 +65,14 @@ class Profiler implements ProfilerInterface
             foreach ($config['outputs'] as $name => $output) {
                 self::configureOutput($name, $output);
             }
+        }
+        if (isset($config['allow_ips'])) {
+            self::$allowIps = array_unique(array_map(function (string $address) {
+                if ($address == 'localhost') {
+                    $address = '127.0.0.1';
+                }
+                return inet_pton($address);
+            }, $config['allow_ips']));
         }
     }
 
@@ -152,7 +167,7 @@ class Profiler implements ProfilerInterface
      */
     public static function start(string $code): void
     {
-        if (self::$enabled) {
+        if (self::isAllowed()) {
             foreach (self::$drivers as $driver) {
                 if ($driver->isEnabled()) {
                     $driver->start($code);
@@ -166,7 +181,7 @@ class Profiler implements ProfilerInterface
      */
     public static function stop(string $code): void
     {
-        if (self::$enabled) {
+        if (self::isAllowed()) {
             foreach (self::$drivers as $driver) {
                 if ($driver->isEnabled()) {
                     $driver->stop($code);
@@ -180,7 +195,7 @@ class Profiler implements ProfilerInterface
      */
     public static function output(): void
     {
-        if (self::$enabled) {
+        if (self::isAllowed()) {
             foreach (self::$drivers as $driver) {
                 if ($driver->isEnabled()) {
                     foreach (self::$outputs as $output) {
@@ -191,5 +206,14 @@ class Profiler implements ProfilerInterface
                 }
             }
         }
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function isAllowed(): bool
+    {
+        return self::$enabled &&
+            (!self::$allowIps || in_array(inet_pton(Request::createFromGlobals()->getClientIp()), self::$allowIps));
     }
 }

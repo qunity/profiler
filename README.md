@@ -40,6 +40,9 @@ Profiler::configure([
                 'enabled' => true
             ]
         ]
+    ],
+    'allow_ips' => [
+        'localhost'
     ]
 ]);
 

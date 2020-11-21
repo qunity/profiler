@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.1.0
+-----
+
+ * added the ability to set a list of allowed IPs addresses
+
 2.0.2
 -----
 
