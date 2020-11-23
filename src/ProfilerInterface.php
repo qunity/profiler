@@ -30,17 +30,17 @@ interface ProfilerInterface
      * Configure profiler driver
      *
      * @param string $name
-     * @param array $driver
+     * @param array $config
      */
-    public static function configureDriver(string $name, array $driver): void;
+    public static function configureDriver(string $name, array $config): void;
 
     /**
      * Configure profiler output
      *
      * @param string $name
-     * @param array $output
+     * @param array $config
      */
-    public static function configureOutput(string $name, array $output): void;
+    public static function configureOutput(string $name, array $config): void;
 
     /**
      * Enable profiler
