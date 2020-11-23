@@ -29,7 +29,7 @@ interface CommonInterface
      * Get config data / config value
      *
      * @param string|null $key
-     * @param null $default
+     * @param mixed $default
      *
      * @return mixed
      */

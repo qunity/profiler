@@ -12,10 +12,6 @@
 namespace Qunity\Component;
 
 use InvalidArgumentException;
-use Qunity\Component\Profiler\DriverFactory;
-use Qunity\Component\Profiler\DriverInterface;
-use Qunity\Component\Profiler\OutputFactory;
-use Qunity\Component\Profiler\OutputInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -32,13 +28,13 @@ class Profiler implements ProfilerInterface
 
     /**
      * Profiler driver list
-     * @var DriverInterface[]
+     * @var Profiler\DriverInterface[]
      */
     protected static array $drivers = [];
 
     /**
      * Profiler output list
-     * @var OutputInterface[]
+     * @var Profiler\OutputInterface[]
      */
     protected static array $outputs = [];
 
@@ -129,13 +125,13 @@ class Profiler implements ProfilerInterface
      */
     public static function addDriver(string $name, string $class, array $config = []): void
     {
-        self::$drivers[$name] = DriverFactory::create($class, $config);
+        self::$drivers[$name] = Profiler\DriverFactory::create($class, $config);
     }
 
     /**
      * @inheritDoc
      */
-    public static function getDriver(string $name): DriverInterface
+    public static function getDriver(string $name): Profiler\DriverInterface
     {
         if (isset(self::$drivers[$name])) {
             return self::$drivers[$name];
@@ -148,13 +144,13 @@ class Profiler implements ProfilerInterface
      */
     public static function addOutput(string $name, string $class, array $config = []): void
     {
-        self::$outputs[$name] = OutputFactory::create($class, $config);
+        self::$outputs[$name] = Profiler\OutputFactory::create($class, $config);
     }
 
     /**
      * @inheritDoc
      */
-    public static function getOutput(string $name): OutputInterface
+    public static function getOutput(string $name): Profiler\OutputInterface
     {
         if (isset(self::$outputs[$name])) {
             return self::$outputs[$name];

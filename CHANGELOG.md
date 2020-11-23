@@ -1,6 +1,11 @@
 CHANGELOG
 =========
 
+2.1.1
+-----
+
+ * fixed doc-block \Qunity\Component\Profiler\CommonInterface::getConfig :)
+
 2.1.0
 -----
 
