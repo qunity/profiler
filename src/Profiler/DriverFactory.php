@@ -11,7 +11,7 @@
 
 namespace Qunity\Component\Profiler;
 
-use InvalidArgumentException;
+use LogicException;
 
 /**
  * Class DriverFactory
@@ -31,7 +31,7 @@ class DriverFactory
     {
         $instance = new $class();
         if (!($instance instanceof DriverInterface)) {
-            throw new InvalidArgumentException(
+            throw new LogicException(
                 sprintf('Class %s does`t implement the interface %s', get_class($instance), DriverInterface::class)
             );
         }

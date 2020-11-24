@@ -46,8 +46,13 @@ Profiler::configure([
     ]
 ]);
 
-Profiler::start('code');
-...
-Profiler::stop('code');
+Profiler::start('name_1');
+    Profiler::start('name_2');
+    
+    // code...
+    
+    Profiler::stop('name_2');
+Profiler::stop('name_1');
+
 Profiler::output();
 ```

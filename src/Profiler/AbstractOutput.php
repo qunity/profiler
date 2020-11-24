@@ -17,5 +17,5 @@ namespace Qunity\Component\Profiler;
  */
 abstract class AbstractOutput extends AbstractCommon implements OutputInterface
 {
-    // abstract class to separate types
+    // abstract class to separate classes types
 }

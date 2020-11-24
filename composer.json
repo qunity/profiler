@@ -2,7 +2,7 @@
   "name": "qunity/profiler",
   "description": "Qunity Component Profiler",
   "type": "library",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "license": "MIT",
   "authors": [
     {

@@ -11,7 +11,7 @@
 
 namespace Qunity\Component;
 
-use InvalidArgumentException;
+use LogicException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -43,6 +43,14 @@ class Profiler implements ProfilerInterface
      * @var array
      */
     protected static array $allowIps = [];
+
+    /**
+     * Profiler constructor.
+     */
+    protected function __construct()
+    {
+        // creating a current instance via "new" is forbidden
+    }
 
     /**
      * @inheritDoc
@@ -107,24 +115,11 @@ class Profiler implements ProfilerInterface
     /**
      * @inheritDoc
      */
-    public static function enable(): void
-    {
-        self::$enabled = true;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function disable(): void
-    {
-        self::$enabled = false;
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function addDriver(string $name, string $class, array $config = []): void
     {
+        if (isset(self::$drivers[$name])) {
+            throw new LogicException("Profiler driver ${name} already exist");
+        }
         self::$drivers[$name] = Profiler\DriverFactory::create($class, $config);
     }
 
@@ -136,7 +131,7 @@ class Profiler implements ProfilerInterface
         if (isset(self::$drivers[$name])) {
             return self::$drivers[$name];
         }
-        throw new InvalidArgumentException(sprintf('Profiler driver %s does not exist', $name));
+        throw new LogicException("Profiler driver ${name} does not exist");
     }
 
     /**
@@ -144,6 +139,9 @@ class Profiler implements ProfilerInterface
      */
     public static function addOutput(string $name, string $class, array $config = []): void
     {
+        if (isset(self::$drivers[$name])) {
+            throw new LogicException("Profiler output ${name} already exist");
+        }
         self::$outputs[$name] = Profiler\OutputFactory::create($class, $config);
     }
 
@@ -155,7 +153,7 @@ class Profiler implements ProfilerInterface
         if (isset(self::$outputs[$name])) {
             return self::$outputs[$name];
         }
-        throw new InvalidArgumentException(sprintf('Profiler output %s does not exist', $name));
+        throw new LogicException("Profiler output ${name} does not exist");
     }
 
     /**

@@ -13,6 +13,7 @@ namespace Qunity\Component\Profiler\Output;
 
 use LogicException;
 use Qunity\Component\Profiler\AbstractOutput;
+use Qunity\Component\Profiler\CommonInterface;
 use Qunity\Component\Profiler\DriverInterface;
 
 /**
@@ -26,9 +27,7 @@ class Csv extends AbstractOutput
      */
     public function output(DriverInterface $driver): void
     {
-        if (!($file = $this->getConfig('file'))) {
-            throw new LogicException('Output CSV file path not specified');
-        }
+        $file = $this->getConfig('file');
         if (!is_dir(($dir = dirname($file)))) {
             mkdir($dir, 0755, true);
         }
@@ -47,5 +46,16 @@ class Csv extends AbstractOutput
             fputcsv($handle, $row);
         }
         fclose($handle);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setConfig(array $config): CommonInterface
+    {
+        if (empty($config['file'])) {
+            throw new LogicException('Output CSV file path not specified');
+        }
+        return parent::setConfig($config);
     }
 }

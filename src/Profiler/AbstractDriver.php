@@ -17,5 +17,5 @@ namespace Qunity\Component\Profiler;
  */
 abstract class AbstractDriver extends AbstractCommon implements DriverInterface
 {
-    // abstract class to separate types
+    // abstract class to separate classes types
 }

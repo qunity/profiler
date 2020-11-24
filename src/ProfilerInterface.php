@@ -40,16 +40,6 @@ interface ProfilerInterface
     public static function configureOutput(string $name, array $output): void;
 
     /**
-     * Enable profiler
-     */
-    public static function enable(): void;
-
-    /**
-     * Disable profiler
-     */
-    public static function disable(): void;
-
-    /**
      * Add profiler driver
      *
      * @param string $name

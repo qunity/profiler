@@ -11,7 +11,7 @@
 
 namespace Qunity\Component\Profiler;
 
-use InvalidArgumentException;
+use LogicException;
 
 /**
  * Class OutputFactory
@@ -31,7 +31,7 @@ class OutputFactory
     {
         $instance = new $class();
         if (!($instance instanceof OutputInterface)) {
-            throw new InvalidArgumentException(
+            throw new LogicException(
                 sprintf('Class %s does`t implement the interface %s', get_class($instance), OutputInterface::class)
             );
         }

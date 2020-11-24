@@ -70,13 +70,11 @@ HTML;
             );
         }
 
-        if ($htmlTbody) {
-            $htmlThead = $this->html('thead', $htmlThead);
-            $htmlTbody = $this->html('tbody', $htmlTbody);
-            $htmlTable = $this->html('table', $htmlThead . $htmlTbody);
+        $htmlThead = $this->html('thead', $htmlThead);
+        $htmlTbody = $this->html('tbody', $htmlTbody);
+        $htmlTable = $this->html('table', $htmlThead . $htmlTbody);
 
-            print $htmlCss . $this->html('div', $htmlTable, ['class' => 'profiler']);
-        }
+        print $htmlCss . $this->html('div', $htmlTable, ['class' => 'profiler']);
     }
 
     /**
