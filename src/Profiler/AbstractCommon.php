@@ -28,6 +28,7 @@ abstract class AbstractCommon implements CommonInterface
      */
     public function getConfig(string $key = null, $default = null)
     {
+        $this->validateConfig($this->config);
         if ($key) {
             if (isset($this->config[$key])) {
                 return $this->config[$key];
@@ -43,7 +44,16 @@ abstract class AbstractCommon implements CommonInterface
      */
     public function setConfig(array $config): CommonInterface
     {
+        $this->validateConfig($config);
         $this->config = $config;
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function validateConfig(array $config): CommonInterface
+    {
         return $this;
     }
 
