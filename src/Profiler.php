@@ -99,22 +99,6 @@ class Profiler implements ProfilerInterface
     /**
      * @inheritDoc
      */
-    public static function configureOutput(string $name, array $output): void
-    {
-        $config = [];
-        if (isset($output['config'])) {
-            $config = $output['config'];
-        }
-        if (isset($output['class'])) {
-            self::addOutput($name, $output['class'], $config);
-        } elseif ($config) {
-            self::getOutput($name)->setConfig($config);
-        }
-    }
-
-    /**
-     * @inheritDoc
-     */
     public static function addDriver(string $name, string $class, array $config = []): void
     {
         if (isset(self::$drivers[$name])) {
@@ -132,6 +116,22 @@ class Profiler implements ProfilerInterface
             return self::$drivers[$name];
         }
         throw new LogicException("Profiler driver ${name} does not exist");
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public static function configureOutput(string $name, array $output): void
+    {
+        $config = [];
+        if (isset($output['config'])) {
+            $config = $output['config'];
+        }
+        if (isset($output['class'])) {
+            self::addOutput($name, $output['class'], $config);
+        } elseif ($config) {
+            self::getOutput($name)->setConfig($config);
+        }
     }
 
     /**
@@ -173,6 +173,15 @@ class Profiler implements ProfilerInterface
     /**
      * @inheritDoc
      */
+    public static function isAllowed(): bool
+    {
+        return self::$enabled &&
+            (!self::$allowIps || in_array(inet_pton(Request::createFromGlobals()->getClientIp()), self::$allowIps));
+    }
+
+    /**
+     * @inheritDoc
+     */
     public static function stop(string $code): void
     {
         if (self::isAllowed()) {
@@ -200,14 +209,5 @@ class Profiler implements ProfilerInterface
                 }
             }
         }
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public static function isAllowed(): bool
-    {
-        return self::$enabled &&
-            (!self::$allowIps || in_array(inet_pton(Request::createFromGlobals()->getClientIp()), self::$allowIps));
     }
 }
