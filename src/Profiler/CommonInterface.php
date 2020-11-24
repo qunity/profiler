@@ -40,4 +40,12 @@ interface CommonInterface
      * @return bool
      */
     public function isEnabled(): bool;
+
+    /**
+     * Validate config data
+     *
+     * @param array $config
+     * @return $this
+     */
+    public function validateConfig(array $config): self;
 }
