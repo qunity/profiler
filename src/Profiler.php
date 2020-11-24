@@ -45,7 +45,7 @@ class Profiler implements ProfilerInterface
     protected static array $allowIps = [];
 
     /**
-     * Profiler constructor.
+     * Profiler constructor
      */
     protected function __construct()
     {
