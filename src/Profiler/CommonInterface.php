@@ -36,16 +36,16 @@ interface CommonInterface
     public function getConfig(string $key = null, $default = null);
 
     /**
-     * Check is enabled activity
-     * @return bool
-     */
-    public function isEnabled(): bool;
-
-    /**
      * Validate config data
      *
      * @param array $config
      * @return $this
      */
     public function validateConfig(array $config): self;
+
+    /**
+     * Check is enabled activity
+     * @return bool
+     */
+    public function isEnabled(): bool;
 }
