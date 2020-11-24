@@ -27,7 +27,7 @@ class Csv extends AbstractOutput
      */
     public function output(DriverInterface $driver): void
     {
-        $file = $this->getConfig('file');
+        $file = $this->getConfig('file', 'profiler.csv');
         if (!is_dir(($dir = dirname($file)))) {
             mkdir($dir, 0755, true);
         }
