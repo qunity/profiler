@@ -21,7 +21,7 @@ interface CommonInterface
      * Set config data
      *
      * @param array $config
-     * @return self
+     * @return $this
      */
     public function setConfig(array $config): self;
 
