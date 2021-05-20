@@ -57,6 +57,9 @@ class Profiler implements ProfilerInterface
      */
     public static function configure(array $config): void
     {
+        if (!$config) {
+            $config = require __DIR__ . '/../etc/profiler.php';
+        }
         if (isset($config['enabled'])) {
             self::$enabled = (bool)$config['enabled'];
         }
@@ -71,12 +74,14 @@ class Profiler implements ProfilerInterface
             }
         }
         if (isset($config['allow_ips'])) {
-            self::$allowIps = array_unique(array_map(function (string $address) {
-                if ($address == 'localhost') {
-                    $address = '127.0.0.1';
-                }
-                return inet_pton($address);
-            }, $config['allow_ips']));
+            self::$allowIps = array_unique(
+                array_map(function (string $address): string {
+                    if ($address == 'localhost') {
+                        $address = '127.0.0.1';
+                    }
+                    return inet_pton($address);
+                }, $config['allow_ips'])
+            );
         }
     }
 
